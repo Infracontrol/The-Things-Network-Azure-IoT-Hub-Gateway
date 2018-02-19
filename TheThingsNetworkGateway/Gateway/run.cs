@@ -30,15 +30,30 @@ namespace TheThingsNetworkGateway
 
         public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
         {
+            log.Info($"enter method");
+
             dynamic data = await req.Content.ReadAsAsync<object>(); // Get request body
 
+            log.Info($"data {data}");
+
             TtnEntity ttn = JsonConvert.DeserializeObject<TtnEntity>(data.ToString(), new JsonSerializerSettings() { ContractResolver = new CamelCasePropertyNamesContractResolver() });
-            
+
+            log.Info($"ttn {ttn.app_id}");
+            log.Info($"config {host},{iotHubRegistryReadPolicyKeyName},{ttnAppIDs}");
+
             if (!ValidTtnApplicationId(ttn.app_id)) { return req.CreateResponse(HttpStatusCode.BadRequest); }
+
+            log.Info($"valid ttn");
+
 
             var result = DecodeRawData(ttn.payload_raw);
 
-            string key = await GetDeviceKeyFromRegistry(ttn.dev_id); // get device key from IoT Hub Registry
+            log.Info($"payload {result}");
+
+            string key = await GetDeviceKeyFromRegistry(ttn.hardware_serial); // get device key from IoT Hub Registry
+
+            log.Info($"key {key}");
+
             if (key == null) { return req.CreateResponse(HttpStatusCode.BadRequest); }
 
             await PostDataToIoTHub(host, key, result, ttn);
@@ -48,10 +63,10 @@ namespace TheThingsNetworkGateway
             return req.CreateResponse(HttpStatusCode.OK);
         }
 
-        public static async Task<bool> PostDataToIoTHub(string host, string key, uint data, TtnEntity ttn)
+        public static async Task<bool> PostDataToIoTHub(string host, string key, string data, TtnEntity ttn)
         {
-            string restUri = $"https://{host}/devices/{ttn.dev_id}/messages/events?api-version={iotHubApiVersion}";
-            var sasToken = GetDeviceSaSToken(host, ttn.dev_id, key);
+            string restUri = $"https://{host}/devices/{ttn.hardware_serial}/messages/events?api-version={iotHubApiVersion}";
+            var sasToken = GetDeviceSaSToken(host, ttn.hardware_serial, key);
 
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", sasToken);
@@ -63,18 +78,19 @@ namespace TheThingsNetworkGateway
             return true;
         }
 
-        public static uint DecodeRawData(string base64EncodedData)
+        public static string DecodeRawData(string base64EncodedData)
         {
-            uint result = 0;
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            var d = System.Text.Encoding.UTF7.GetString(base64EncodedBytes);
+            return BitConverter.ToString(Convert.FromBase64String(base64EncodedData)).Replace("-", "").ToLowerInvariant();
+            //uint result = 0;
+            //var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            //var d = System.Text.Encoding.UTF7.GetString(base64EncodedBytes);
 
-            for (int i = 0; i < d.Length; i++)
-            {
-                result = result << (8);
-                result += (byte)d[i];
-            }
-            return result;
+            //for (int i = 0; i < d.Length; i++)
+            //{
+            //    result = result << (8);
+            //    result += (byte)d[i];
+            //}
+            //return result;
         }
 
         public static async Task<string> GetDeviceKeyFromRegistry(string deviceId)

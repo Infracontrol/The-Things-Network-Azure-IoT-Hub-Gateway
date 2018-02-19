@@ -5,11 +5,11 @@ namespace TheThingsNetworkGateway
 {
     public class Telemetry
     {
-        public UInt32 Level { get; set; }
-        public string Schema { get; set; } = "1";
-        public string ToJson(UInt32 level)
+        public string Payload { get; set; }
+        //public string Schema { get; set; } = "1";
+        public string ToJson(string data)
         {
-            this.Level = level;
+            this.Payload = data;
             return JsonConvert.SerializeObject(this);
         }
     }

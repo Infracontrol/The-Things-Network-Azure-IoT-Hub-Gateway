@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -98,9 +99,10 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="host.json" />
-    <Content Include="local.settings.json" />
     <Content Include="Gateway\function.json" />
     <Compile Include="Gateway\run.cs" />
+    <None Include="Properties\PublishProfiles\iol-ttn-4 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\iol-ttn-4 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\TheThingsNetworkGateway - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\TheThingsNetworkGateway - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
