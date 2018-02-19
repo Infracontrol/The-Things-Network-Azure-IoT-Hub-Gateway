@@ -44,7 +44,7 @@ namespace TheThingsNetworkGateway
 
             await PostDataToIoTHub(host, key, result, ttn);
 
-            log.Info($"device '{ttn.dev_id}', raw payload '{ttn.payload_raw}', decoded value '{result}'");
+            log.Info($"device; '{ttn.hardware_serial}', payload: '{result}'");
 
             return req.CreateResponse(HttpStatusCode.OK);
         }
