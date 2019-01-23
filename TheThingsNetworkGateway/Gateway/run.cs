@@ -20,13 +20,12 @@ namespace TheThingsNetworkGateway
     public class Gateway
     {
         static Telemetry telemetry = new Telemetry();
-        static string iotHubApiVersion = "2016-11-14";
+        static readonly string iotHubApiVersion = "2016-11-14";
 
-        static string host = ConfigurationManager.AppSettings["IoTHubHostname"];
-        static string iotHubRegistryReadPolicyKeyName = ConfigurationManager.AppSettings["IotHubRegistryReadPolicyKeyName"];
-        static string iotHubRegistryReadKey = ConfigurationManager.AppSettings["IotHubRegistryReadPolicyKey"];
-        static string ttnAppIDs = ConfigurationManager.AppSettings["TTNAppIDsCommaSeperated"];
-
+        static readonly string host = ConfigurationManager.AppSettings["IoTHubHostname"];
+        static readonly string iotHubRegistryReadPolicyKeyName = ConfigurationManager.AppSettings["IotHubRegistryReadPolicyKeyName"];
+        static readonly string iotHubRegistryReadKey = ConfigurationManager.AppSettings["IotHubRegistryReadPolicyKey"];
+        static readonly string ttnAppIDs = ConfigurationManager.AppSettings["TTNAppIDsCommaSeperated"];
 
         public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
         {

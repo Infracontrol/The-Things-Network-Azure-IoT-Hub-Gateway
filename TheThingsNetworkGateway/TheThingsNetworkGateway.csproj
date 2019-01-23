@@ -103,6 +103,8 @@
     <Compile Include="Gateway\run.cs" />
     <None Include="Properties\PublishProfiles\iol-ttn-4 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\iol-ttn-4 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\iol-ttn-iohub1 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\iol-ttn-iohub1 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\TheThingsNetworkGateway - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\TheThingsNetworkGateway - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
