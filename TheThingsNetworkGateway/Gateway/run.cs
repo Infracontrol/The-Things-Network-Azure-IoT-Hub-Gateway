@@ -43,12 +43,12 @@ namespace TheThingsNetworkGateway
 
             await PostDataToIoTHub(host, key, result, ttn);
 
-            log.Info($"device '{ttn.hardware_serial}', payload '{result}'");
+            log.Info($"device '{ttn.hardware_serial}', payload '{result}', port: {ttn.port}");
 
             return req.CreateResponse(HttpStatusCode.OK);
         }
 
-        public static async Task<bool> PostDataToIoTHub(string host, string key, string data, TtnEntity ttn)
+        public static async Task<bool> PostDataToIoTHub(string host, string key, string payload, TtnEntity ttn)
         {
             string restUri = $"https://{host}/devices/{ttn.hardware_serial}/messages/events?api-version={iotHubApiVersion}";
             var sasToken = GetDeviceSaSToken(host, ttn.hardware_serial, key);
@@ -57,7 +57,7 @@ namespace TheThingsNetworkGateway
             client.DefaultRequestHeaders.Add("Authorization", sasToken);
             client.DefaultRequestHeaders.Add("iothub-app-route-id", "ttn-" + ttn.app_id);
 
-            var content = new StringContent(telemetry.ToJson(data));
+            var content = new StringContent(telemetry.ToJson(payload, ttn.port));
             var response = await client.PostAsync(restUri, content);
 
             return true;

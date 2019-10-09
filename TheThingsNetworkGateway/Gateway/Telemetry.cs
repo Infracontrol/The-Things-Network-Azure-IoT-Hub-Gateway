@@ -6,9 +6,12 @@ namespace TheThingsNetworkGateway
     public class Telemetry
     {
         public string payload { get; set; }
-        public string ToJson(string data)
+        public int fPort { get; set; }
+
+        public string ToJson(string payload, int fPort)
         {
-            payload = data;
+            this.payload = payload;
+            this.fPort = fPort;
             return JsonConvert.SerializeObject(this);
         }
     }
